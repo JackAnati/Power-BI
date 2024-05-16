@@ -144,3 +144,83 @@ Table storage mode settings determine the model framework, which can be either i
 - A DirectQuery model comprises tables that have their storage mode property set to DirectQuery, and they belong to the same source group. Source group is described later in this module.
 - A composite model comprises more than one source group.
 
+In the Fields pane, a column that's shown with the sigma symbol ( ∑ ) indicates two facts:
+- It's a numeric column.
+- It will summarize column values when it is used in a visual (when added to a field well that supports summarization).
+
+**Numeric columns support the greatest range of aggregation functions:**
+
+- Sum
+- Average
+- Minimum
+- Maximum
+- Count (Distinct)
+- Count
+- Standard deviation
+- Variance
+- Median
+  
+**Summarize non-numeric columns**
+Non-numeric columns can be summarized. However, the sigma symbol does not show next to non-numeric columns in the Fields pane because they don't summarize by default.
+
+**Text columns allow the following aggregations:**
+
+- First (alphabetically)
+- Last (alphabetically)
+- Count (Distinct)
+- Count
+
+**Date columns allow the following aggregations:**
+
+- Earliest
+- Latest
+- Count (Distinct)
+- Count
+
+**Boolean columns allow the following aggregations:**
+
+- Count (Distinct)
+- Count
+
+**Create compound measures**
+
+When a measure references one or more measures, it's known as a **compound measure**
+
+**Date tables**
+Date tables are required to apply special time filters known as **time intelligence**. DAX time intelligence functions only work correctly when a date table is set up. When your source data doesn't include a date table, you can create one as calculated tables by using the CALENDAR or CALENDARAUTO DAX functions.
+
+**BLANK data type**
+The BLANK data type deserves a special mention. DAX uses BLANK for both database NULL and for blank cells in Excel. BLANK doesn't mean zero. Perhaps it might be simpler to think of it as the absence of a value.
+
+Two DAX functions are related to the BLANK data type: the BLANK DAX function returns BLANK, while the ISBLANK DAX function tests whether an expression evaluates to BLANK.
+
+**Use DAX variables**
+
+You can declare DAX variables in your formula expressions. When you declare at least one variable, a RETURN clause is used to define the expression, which then refers to the variables.
+
+We recommend that you use variables because they offer several benefits:
+
+- Improving the readability and maintenance of your formulas.
+- Improving performance because variables are evaluated once and only when or if they're needed.
+- Allowing (at design time) straightforward testing of a complex formula by returning the variable of interest.
+  
+The following example shows a formula that declares a variable. The Revenue YoY % measure definition is rewritten to declare a variable that's assigned the value of the prior year's revenue.
+
+Date table requirement
+To work with time intelligence DAX functions, you need to meet the prerequisite model requirement of having at least one date table in your model. A date table is a table that meets the following requirements:
+
+- It must have a column of data type Date (or date/time), known as the date column.
+- The date column must contain unique values.
+- The date column must not contain BLANKs.
+- The date column must not have any missing dates.
+- The date column must span full years. A year isn't necessarily a calendar year (January-December).
+- The date table must be indicated as a date table.
+For more information, see Create date tables in Power BI Desktop.
+
+Summarizations over time
+One group of DAX time intelligence functions is concerned with summarizations over time:
+
+- DATESYTD - Returns a single-column table that contains dates for the year-to-date (YTD) in the current filter context. This group also includes the DATESMTD and DATESQTD DAX functions for month-to-date (MTD) and quarter-to-date (QTD). You can pass these functions as filters into the CALCULATE DAX function.
+- TOTALYTD - Evaluates an expression for YTD in the current filter context. The equivalent QTD and MTD DAX functions of TOTALQTD and TOTALMTD are also included.
+- DATESBETWEEN - Returns a table that contains a column of dates that begins with a given start date and continues until a given end date.
+- DATESINPERIOD - Returns a table that contains a column of dates that begins with a given start date and continues for the specified number of intervals.
